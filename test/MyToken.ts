@@ -1,12 +1,23 @@
 import hre from "hardhat";
+import { expect } from "chai";
+import { MyToken } from "../typechain-types";
 
 describe("mytoken deploy", () => {
-    it("should deploy", async () => {
-        const myTokenC = await hre.ethers.deployContract("MyToken", [
+    let myTokenC:MyToken;
+    before("should deploy", async () => {
+        myTokenC = await hre.ethers.deployContract("MyToken", [
             "MyToken",
             "MT", 
             18,
         ]);
-        console.log((await myTokenC).name());
     });
+    it("should return name", async () => {
+        expect(await myTokenC.name()).equal("MyToken");
+    })
+    it("should return symbol", async () => {
+        expect(await myTokenC.symbol()).equal("MT");
+    })
+    it("should return decimals", async () => {
+        expect(await myTokenC.decimals()).equal(18);
+    })
 });
