@@ -6,6 +6,7 @@ import { HardhatEthersSigner } from "@nomicfoundation/hardhat-ethers/signers"
 describe("mytoken deploy", () => {
     let myTokenC:MyToken;
     let signers:HardhatEthersSigner[];
+    let mintAmount:BigInt;
     before("should deploy", async () => {
         myTokenC = await hre.ethers.deployContract("MyToken", [
             "MyToken",
@@ -13,6 +14,7 @@ describe("mytoken deploy", () => {
             18,
         ]);
         signers = await hre.ethers.getSigners();
+        mintAmount = 1n*10n**18n;
     });
     it("should return name", async () => {
         expect(await myTokenC.name()).equal("MyToken");
@@ -23,11 +25,12 @@ describe("mytoken deploy", () => {
     it("should return decimals", async () => {
         expect(await myTokenC.decimals()).equal(18);
     });
-    it("should return 0 totalSupply", async () => {
-        expect(await myTokenC.totalSupply()).equal(0);
+    it("should return 1MT totalSupply", async () => {
+        expect(await myTokenC.totalSupply()).equal(mintAmount);
     });
-    it("should return 0 balance for signer 0", async () => {
+    // 1MT = 1 * 10^18
+    it("should return 1MT balance for signer 0", async () => {
         const signer0 = signers[0];
-        expect(await myTokenC.balanceOf(signer0)).equal(0);
+        expect(await myTokenC.balanceOf(signer0)).equal(mintAmount);
     });
 });
