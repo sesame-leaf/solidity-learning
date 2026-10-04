@@ -1,4 +1,4 @@
-// SPDX-License-Idetifier: MIT
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
 contract MyToken {
@@ -20,4 +20,6 @@ contract MyToken {
         totalSupply += amount;
         balanceOf[owner] += amount;
     }
+
+    
 }
