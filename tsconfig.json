@@ -2,7 +2,8 @@
   "compilerOptions": {
     "rootDir": ".",
     "target": "es2020",
-    "module": "commonjs",
+    "module": "node16",
+    "moduleResolution": "node16",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
