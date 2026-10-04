@@ -33,7 +33,7 @@ describe("mytoken deploy", () => {
         const signer0 = signers[0];
         expect(await myTokenC.balanceOf(signer0)).equal(mintAmount);
     });
-    it("should have 0.5MT ", async () => {
+    it("should have 0.5MT", async () => {
         const signer1 = signers[1];
         await myTokenC.transfer(hre.ethers.parseUnits("0.5", 18), signer1.address);
         // console.log(await myTokenC.balanceOf(signer1.address));
