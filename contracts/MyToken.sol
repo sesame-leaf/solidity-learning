@@ -13,6 +13,12 @@ contract MyToken {
         name = _name;
         symbol = _symbol;
         decimals = _decimal;
+        _mint(100000000000000000, msg.sender); // msg.sender: 이 contract를 배포하는 사람한테 1 MT 토큰을 발행
+    }
+
+    function _mint(uint256 amount, address owner) internal {
+        totalSupply += amount;
+        balanceOf[owner] += amount;
     }
 
     // function totalSupply() external view returns (uint256) {
