@@ -57,8 +57,9 @@ describe("My Token", () => {
         it("should be reverted with insufficient balance error", async () => {
             const signer1 = signers[1];
             await expect(
-                myTokenC.transfer(hre.ethers.parseUnits((mintingAmount + 1n).toString(), decimals),
-                signer1.address
+                myTokenC.transfer(
+                    hre.ethers.parseUnits((mintingAmount + 1n).toString(), decimals),
+                    signer1.address
                 )
             ).to.be.revertedWith("insufficient balance");
         });
