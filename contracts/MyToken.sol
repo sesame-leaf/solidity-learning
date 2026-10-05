@@ -11,11 +11,11 @@ contract MyToken {
     // 데이터 체크가 중요한 application이면 서로 다른 여러개의 노드에 데이터를 조회해서 모두 같은지 검증 가능
     mapping(address => uint256) public balanceOf;
 
-    constructor(string memory _name, string memory _symbol, uint8 _decimal) {
+    constructor(string memory _name, string memory _symbol, uint8 _decimal, uint256 _amount) {
         name = _name;
         symbol = _symbol;
         decimals = _decimal;
-        _mint(1*10**uint256(decimals), msg.sender); // msg.sender: 이 contract를 배포하는 사람한테 1 MT 토큰을 발행
+        _mint(_amount * 10 ** uint256(decimals), msg.sender); // msg.sender: 이 contract를 배포하는 사람한테 1 MT 토큰을 발행
     }
 
     function _mint(uint256 amount, address owner) internal {
