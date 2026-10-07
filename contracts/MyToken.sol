@@ -2,7 +2,8 @@
 pragma solidity ^0.8.28;
 
 contract MyToken {
-    event Transfer(address from, address to, uint256 value);
+    // 분산원장은 storage가 비싸기 때문에 event로 recipt를 받아서 따로 관리한다.
+    event Transfer(address indexed from, address indexed to, uint256 value);
 
     string public name;
     string public symbol;
@@ -23,6 +24,8 @@ contract MyToken {
     function _mint(uint256 amount, address owner) internal {
         totalSupply += amount;
         balanceOf[owner] += amount;
+
+        emit Transfer(address(0), owner, amount);
     }
 
     function transfer(uint256 amount, address to) external {
