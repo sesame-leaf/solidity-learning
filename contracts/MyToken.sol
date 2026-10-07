@@ -24,6 +24,7 @@ contract MyToken {
     }
 
     function approve(address spender, uint256 amount) external {
+        // 먼가 OAuth 인증 같은 느낌임
         allowance[msg.sender][spender] = amount;
 
         emit Approval(spender, amount);
