@@ -33,6 +33,18 @@ contract MyToken {
         emit Transfer(address(0), owner, amount);
     }
 
+    function TransferFrom(address from, address to, uint256 amount) external {
+        // 이 함수는 제 3자가 호출함.
+        // from: 토큰 소유자
+        // to: 토큰을 받는자
+        // spender: from의 토큰을 실제로 쓰는 사람(제 3자)
+        address spender = msg.sender;
+        require(allowance[from][spender] >= amount, "insufficient allowance");
+        allowance[from][spender] -= amount;
+        balanceOf[from] -= amount;
+        balanceOf[to] += amount;
+    }
+
     function transfer(uint256 amount, address to) external {
         require(balanceOf[msg.sender] >= amount, "insufficient balance");
         balanceOf[msg.sender] -= amount;
