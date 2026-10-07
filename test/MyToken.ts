@@ -77,6 +77,7 @@ describe("My Token", () => {
         it("should emit Approval event", async () => {
             const signer1 = signers[1];
             await expect(
+                // signers[0]는 signer1에게 10MT만큼의 권한을 부여
                 myTokenC.approve(signer1.address, hre.ethers.parseUnits("10", decimals))
             )
                 .to.emit(myTokenC, "Approval")
@@ -93,6 +94,25 @@ describe("My Token", () => {
                     hre.ethers.parseUnits("1", decimals)
                 )
             ).to.be.revertedWith("insufficient allowance");
+        });
+        it("should return 10MT balance for signer1", async () => {
+            // 과제: approve, TransferFrom 해서 signer1의 balance가 늘어났음을 보이기.
+            // 질문: signer1이 TransferFrom을 호출해서 자기 계좌에 돈 넣는게 좀 이상한데 괜찮은건가요?
+            const signer0 = signers[0];
+            const signer1 = signers[1];
+
+            // signer0는 signer1에게 10MT만큼의 권한을 부여
+            await myTokenC.approve(signer1, hre.ethers.parseUnits("10", decimals));
+            // signer1이 TransferFrom을 호출해 signer0의 10MT를 signer1의 계좌로 보냄
+            await myTokenC.connect(signer1)
+                .TransferFrom(
+                    signer0,
+                    signer1,
+                    hre.ethers.parseUnits("10", decimals)
+                );
+            expect(await myTokenC.balanceOf(signer1)).equal(
+                hre.ethers.parseUnits("10", decimals)
+            );
         });
     });
 });
