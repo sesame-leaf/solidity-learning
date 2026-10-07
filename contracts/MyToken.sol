@@ -13,12 +13,17 @@ contract MyToken {
     // 데이터 조회는 transaction을 만들 필요 없이 그냥 조회할 수 있음.
     // 데이터 체크가 중요한 application이면 서로 다른 여러개의 노드에 데이터를 조회해서 모두 같은지 검증 가능
     mapping(address => uint256) public balanceOf;
+    mapping(address => mapping(address => uint256)) allowance;
 
     constructor(string memory _name, string memory _symbol, uint8 _decimal, uint256 _amount) {
         name = _name;
         symbol = _symbol;
         decimals = _decimal;
         _mint(_amount * 10 ** uint256(decimals), msg.sender); // msg.sender: 이 contract를 배포하는 사람한테 1 MT 토큰을 발행
+    }
+
+    function approve(address spender, uint256 amount) external {
+        allowance[msg.sender][spender] = amount;
     }
 
     function _mint(uint256 amount, address owner) internal {
@@ -36,3 +41,14 @@ contract MyToken {
         emit Transfer(msg.sender, to, amount);
     }
 }
+
+/*
+approve
+    - allow spender address to send my token
+transferFrom
+    - spender: owner -> target address
+
+* token owner --> bank contract
+* token owenr --> router contract --> bank contract
+* token owner --> router contract --> bank contract(multi contract)
+*/
