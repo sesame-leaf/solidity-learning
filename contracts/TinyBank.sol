@@ -20,8 +20,8 @@ contract TinyBank {
     event Staked(address, uint256);
 
     IMyToken public stakingToken;
-    mapping(address => uint256) staked;
-    uint256 totalStaked; // TinyBank의 자산
+    mapping(address => uint256) public staked;
+    uint256 public totalStaked; // TinyBank의 자산
 
     constructor(IMyToken _stakingToken) {
         // 반드시 TinyBank contract는 staking 할 Token을 먼저 배포한 후 
@@ -39,7 +39,7 @@ contract TinyBank {
         stakingToken.TransferFrom(msg.sender, address(this), _amount);
         staked[msg.sender] += _amount;
         totalStaked += _amount;
-        
+
         emit Staked(msg.sender, _amount);
     }
 }
