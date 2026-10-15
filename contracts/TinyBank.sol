@@ -7,6 +7,11 @@
 // - user --> deposit --> TinyBank --> transfer(user --> TinyBank)
 // - deposit이 MyToken의 transfer를 wrapping 하는 느낌인듯?
 
+// Reward
+// - reward token : MyToken
+// - reward resources : 1 MT/block minting
+// - reward strategy : staked[user] / total Staked distribution
+
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
@@ -14,6 +19,8 @@ interface IMyToken {
     function transfer(uint256 amount, address to) external;
     
     function TransferFrom(address from, address to, uint256 amount) external;
+
+    function mint(uint256 amount, address owner) external;
 }
 
 contract TinyBank {
@@ -21,6 +28,10 @@ contract TinyBank {
     event Withdraw(uint256 amount, address to);
 
     IMyToken public stakingToken;
+    
+    mapping(address => uint256) public lastClaimedBlock;
+    uint256 rewardPerBlock = 1 * 10**18;
+
     mapping(address => uint256) public staked;
     uint256 public totalStaked; // TinyBank의 자산
 
@@ -30,8 +41,16 @@ contract TinyBank {
         stakingToken = _stakingToken;
     }
 
+    function distributeReward(address to) internal {
+        uint256 blocks = block.number - lastClaimedBlock[to];
+        uint256 reward = (blocks * rewardPerBlock * staked[to]) / totalStaked;
+        stakingToken.mint(reward, to);
+        lastClaimedBlock[to] = block.number;
+    }
+
     function stake(uint256 _amount) external {
         require(_amount >= 0, "cannot stake 0 amount");
+        distributeReward(msg.sender);
         // transfer는 내부적으로 msg.sender의 balance를 확인함.
         // msg.sender는 TinyBank의 주소임.
         // (transfer는 이 함수 안에서 호출하고, 이 함수는 TinyBank가 호출하는거임)
@@ -46,6 +65,7 @@ contract TinyBank {
 
     function withdraw(uint256 _amount) external {
         require(staked[msg.sender] >= _amount, "insufficient staked token");
+        distributeReward(msg.sender);
         stakingToken.transfer(_amount, msg.sender);
         staked[msg.sender] -= _amount;
         totalStaked -= _amount;
