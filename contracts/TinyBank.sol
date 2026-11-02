@@ -34,7 +34,7 @@ contract TinyBank is ManagedAccess {
     mapping(address => uint256) public lastClaimedBlock;
 
     uint256 defaultRewardPerBlock = 1 * 10 ** 18;
-    uint256 rewardPerBlock;
+    uint256 public rewardPerBlock;
 
     mapping(address => uint256) public staked;
     uint256 public totalStaked; // TinyBank의 자산
@@ -57,7 +57,7 @@ contract TinyBank is ManagedAccess {
         _; // 이 modifier를 호출하는 함수를 호출하기 전에 이 행 윗쪽의 코드를 먼저 실행함
     }
 
-    function setRewardPerBlock(uint256 _amount) external onlyManager {
+    function setRewardPerBlock(uint256 _amount) external onlyAllConfirmed {
         rewardPerBlock = _amount;
     }
 
