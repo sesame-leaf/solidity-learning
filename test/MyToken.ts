@@ -34,22 +34,22 @@ describe("My Token", () => {
     });
     // 1MT = 1 * 10^18
     describe("Mint", () => {
-        it("should return 100MT balance for signer 0", async () => {
+        it("should return 1MT balance for signer 0", async () => {
             const signer0 = signers[0];
             expect(await myTokenC.balanceOf(signer0)).equal(
                 MINTING_AMOUNT * 10n ** DECIMALS
             );
         });
 
+        // 9-6 5:11 최초 배포자(signer[0])이 minting 하는 Test case 만들기 (minting function test가 없으니 만들어야함.)
+
+        // TDD: Test Driven Development
         it("should return or revert when minting infinitly", async () => {
-            const signer2 = signers[2];
+            const hacker = signers[2];
             const mintingAgainAmount = hre.ethers.parseUnits("10000", DECIMALS);
-            await myTokenC.connect(signer2).mint(mintingAgainAmount, signer2.address);
-            console.log(
-                hre.ethers
-                .formatUnits(await myTokenC.balanceOf(signer2.address), DECIMALS)
-                .toString() + "MT"
-            );
+            await expect(
+                myTokenC.connect(hacker).mint(mintingAgainAmount, hacker.address)
+            ).to.be.revertedWith("You are not authorized to manage this token");
         });
     });
     describe("Transfer", () => {

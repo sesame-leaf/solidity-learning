@@ -6,6 +6,8 @@ contract MyToken {
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(address indexed spender, uint256 amount);
 
+    address public owner;
+    address public manager;
     string public name;
     string public symbol;
     uint8 public decimals; // 소수점 아래 몇 자리까지 지원 할건지
@@ -16,11 +18,31 @@ contract MyToken {
     mapping(address => uint256) public balanceOf;
     mapping(address => mapping(address => uint256)) public allowance;
 
-    constructor(string memory _name, string memory _symbol, uint8 _decimal, uint256 _amount) {
+    constructor(
+        string memory _name,
+        string memory _symbol,
+        uint8 _decimal,
+        uint256 _amount
+    ) {
+        owner = msg.sender;
+        manager = msg.sender;
         name = _name;
         symbol = _symbol;
         decimals = _decimal;
         _mint(_amount * 10 ** uint256(decimals), msg.sender); // msg.sender: 이 contract를 배포하는 사람한테 1 MT 토큰을 발행
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "You are not authorized");
+        _;
+    }
+
+    modifier onlyManager() {
+        require(
+            msg.sender == manager,
+            "You are not authorized to manage this token"
+        );
+        _;
     }
 
     function approve(address spender, uint256 amount) external {
@@ -30,15 +52,20 @@ contract MyToken {
         emit Approval(spender, amount);
     }
 
-    function mint(uint256 amount, address owner) external {
-        _mint(amount, owner);
+    // 이러면 owner가 이 함수를 호출하지 못하는데, 그냥 mgr를 배열로 만들고 owner가 자기 자신을 배열에 추가하면 안되는건가?
+    function mint(uint256 amount, address to) external onlyManager {
+        _mint(amount, to);
     }
 
-    function _mint(uint256 amount, address owner) internal {
-        totalSupply += amount;
-        balanceOf[owner] += amount;
+    function setManager(address _manager) external onlyOwner {
+        manager = _manager;
+    }
 
-        emit Transfer(address(0), owner, amount);
+    function _mint(uint256 amount, address to) internal {
+        totalSupply += amount;
+        balanceOf[to] += amount;
+
+        emit Transfer(address(0), to, amount);
     }
 
     function TransferFrom(address from, address to, uint256 amount) external {
