@@ -49,7 +49,7 @@ contract TinyBank {
             stakingToken.mint(reward, to);
         }
         lastClaimedBlock[to] = block.number;
-        _;
+        _; // 이 modifier를 호출하는 함수를 호출하기 전에 이 행 윗쪽의 코드를 먼저 실행함
     }
 
     function stake(uint256 _amount) external updateReward(msg.sender) {
