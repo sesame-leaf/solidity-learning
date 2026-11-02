@@ -40,6 +40,17 @@ describe("My Token", () => {
                 MINTING_AMOUNT * 10n ** DECIMALS
             );
         });
+
+        it("should return or revert when minting infinitly", async () => {
+            const signer2 = signers[2];
+            const mintingAgainAmount = hre.ethers.parseUnits("10000", DECIMALS);
+            await myTokenC.connect(signer2).mint(mintingAgainAmount, signer2.address);
+            console.log(
+                hre.ethers
+                .formatUnits(await myTokenC.balanceOf(signer2.address), DECIMALS)
+                .toString() + "MT"
+            );
+        });
     });
     describe("Transfer", () => {
         it("should have 0.5MT", async () => {
