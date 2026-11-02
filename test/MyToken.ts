@@ -41,7 +41,7 @@ describe("My Token", () => {
             );
         });
 
-        // 9-6 5:11 최초 배포자(signer[0])이 minting 하는 Test case 만들기 (minting function test가 없으니 만들어야함.)
+        // TODO: 9-6 5:11 최초 배포자(signer[0])이 minting 하는 Test case 만들기 (minting function test가 없으니 만들어야함.)
 
         // TDD: Test Driven Development
         it("should return or revert when minting infinitly", async () => {
