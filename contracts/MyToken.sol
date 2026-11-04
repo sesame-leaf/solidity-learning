@@ -41,6 +41,10 @@ contract MyToken is ManagedAccess {
         _mint(amount, to);
     }
 
+    function setManager(address _manager) external onlyOwner {
+        manager = _manager;
+    }
+
     function _mint(uint256 amount, address to) internal {
         totalSupply += amount;
         balanceOf[to] += amount;
