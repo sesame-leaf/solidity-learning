@@ -23,11 +23,7 @@ abstract contract MultiManagedAccess {
     }
 
     function allConfirmed() internal view returns (bool) {
-        for (uint i=0; i<MANAGER_NUMBERS; i++) {
-            if (!confirmed[i]) {
-                return false;
-            }
-        }
+        for (uint i=0; i<MANAGER_NUMBERS; i++) if (!confirmed[i]) return false;
         return true;
     }
 
