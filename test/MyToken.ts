@@ -99,7 +99,7 @@ describe("My Token", () => {
             const signer1 = signers[1];
             await expect(myTokenC
                 .connect(signer1)
-                .TransferFrom(
+                .transferFrom(
                     signer0.address,
                     signer1.address,
                     hre.ethers.parseUnits("1", DECIMALS)
@@ -116,7 +116,7 @@ describe("My Token", () => {
             await myTokenC.approve(signer1, hre.ethers.parseUnits("10", DECIMALS));
             // signer1이 TransferFrom을 호출해 signer0의 10MT를 signer1의 계좌로 보냄
             await myTokenC.connect(signer1)
-                .TransferFrom(
+                .transferFrom(
                     signer0,
                     signer1,
                     hre.ethers.parseUnits("10", DECIMALS)

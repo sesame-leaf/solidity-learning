@@ -60,7 +60,7 @@ def approve(_spender: address, _amount: uint256):
 
 
 @external
-def TransferFrom(_owner: address, _to: address, _amount: uint256):
+def transferFrom(_owner: address, _to: address, _amount: uint256):
     assert self.allowances[_owner][msg.sender] >= _amount, "insufficient allowance"
     assert self.balanceOf[_owner] >= _amount, "insufficient balance"
     self.balanceOf[_owner] -= _amount
