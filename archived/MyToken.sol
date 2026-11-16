@@ -59,6 +59,7 @@ contract MyToken is ManagedAccess {
         // spender: from의 토큰을 실제로 쓰는 사람(제 3자)
         address spender = msg.sender;
         require(allowance[from][spender] >= amount, "insufficient allowance");
+        require(balanceOf[from] >= amount, "insufficient balance");
         allowance[from][spender] -= amount;
         balanceOf[from] -= amount;
         balanceOf[to] += amount;
