@@ -7,9 +7,11 @@ event Transfer:
     to: indexed(address)
     amount: uint256
 
+
 event Approval:
     spender: indexed(address)
     amount: uint256
+
 
 owner: address
 manager: address
@@ -17,6 +19,7 @@ name: public(String[64])
 symbol: public(String[32])
 decimals: public(uint256)
 totalSupply: public(uint256)
+
 
 balanceOf: public(HashMap[address, uint256])
 allowances: public(HashMap[address, HashMap[address, uint256]])
